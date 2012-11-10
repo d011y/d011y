@@ -4,7 +4,7 @@ This is an entry to [GitHub Game Off](https://github.com/blog/1303-github-game-o
 
 ### Goals
 Gamify a development workflow using git and web technologies. The player should acquired knowledge through the game about development cycle in a fun way.
-At the end of the game what should the concepts the player have learned?
+At the end of the game what should the concepts the player have contact with?
  * git workflow
  * test driven development
  * basic algorithms
