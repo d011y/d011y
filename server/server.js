@@ -5,8 +5,12 @@ var GitHubStrategy = require('passport-github').Strategy;
 var app = express(),
     server = require('http').createServer(app);
 
-var port = process.env.PORT || 80;
+var port = process.env.PORT || 8000;
 var staticDirPath = __dirname + '/public';
+
+
+console.log("github app id => " + conf.github.appId);
+console.log("github app secret => " + conf.github.appSecret);
 
 passport.serializeUser(function(user, done) {
   console.log(user);
