@@ -1,0 +1,16 @@
+{
+  "name": "pushtorun",
+  "version": "0.0.1",
+  "description": "proof-of-concept, notify clients (browser) about new commits on a repository",
+  "main": "notification.js",
+  "dependencies": {
+    "express": "~3.0.1",
+    "socket.io": "~0.9.11",
+    "passport": "~0.1.15",
+    "passport-github": "~0.1.3"
+  },
+  "engines": {
+    "node": "0.8.x",
+    "npm":  "1.1.x"
+  }
+}
