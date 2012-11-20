@@ -58,19 +58,13 @@ app.get('/auth/github',
 app.get('/auth/github/callback',
   passport.authenticate('github', { failureRedirect: '/login' }),
   function(req, res) {
-    console.log('callback called');
-
-    persistence.get(req.user.id, 
-      function(user){
-        if(user === null){
-        persistence.create(function(newUser){
     
-          newUser.id = req.user.id; //Github identifier
-          newUser.username = req.user.username; //Github username
-          newUser.displayName = req.user.displayName; //Github username
-          persistence.save(newUser);
-        });
-      }
+    persistence.create(function(newUser){
+      newUser.ghId = req.user.id; //Github identifier
+      newUser.ghUsername = req.user.username; //Github username
+      newUser.ghDisplayName = req.user.displayName; //Github username
+      persistence.save(newUser);
+
     });
    
 
@@ -100,11 +94,11 @@ app.get('/user',function(req, res){
 
 app.get('/save',function(req, res){
   persistence.create(function(newUser){
-    newUser.id = 10;
-    newUser.username = 'd011y';
-    newUser.displayName = 'd011y the clone';
-    persistence.save(newUser, function(){
-      res.send("Saved");
+    newUser.ghId = 10;
+    newUser.ghUsername = 'd011y';
+    newUser.ghDisplayName = 'd011y the clone';
+    persistence.save(newUser, function(user){
+      res.send("Saved => " + user.displayName);
     });
 
     
