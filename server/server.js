@@ -1,5 +1,7 @@
-var express = require('express');
 var conf = require('./conf');
+var persistence = require('./lib/persistence').user_provider;
+
+var express = require('express');
 var passport = require('passport');
 var GitHubStrategy = require('passport-github').Strategy;
 var app = express(),
@@ -13,19 +15,17 @@ console.log("github app id => " + conf.github.appId);
 console.log("github app secret => " + conf.github.appSecret);
 
 passport.serializeUser(function(user, done) {
-  console.log(user);
   done(null, user);
 });
 
 passport.deserializeUser(function(obj, done) {
-  console.log(obj);
   done(null, obj);
 });
 
 passport.use(new GitHubStrategy({
     clientID: conf.github.appId,
     clientSecret: conf.github.appSecret,
-    callbackURL: "http://d011y.herokuapp.com/auth/github/callback"
+    callbackURL: conf.github.callbackURL
   },
   function(accessToken, refreshToken, profile, done) {
     // asynchronous verification, for effect...
@@ -58,8 +58,23 @@ app.get('/auth/github',
 app.get('/auth/github/callback',
   passport.authenticate('github', { failureRedirect: '/login' }),
   function(req, res) {
-    res.redirect('/');
-    console.log(req.user);
+    console.log('callback called');
+
+    persistence.get(req.user.id, 
+      function(user){
+        if(user === null){
+        persistence.create(function(newUser){
+    
+          newUser.id = req.user.id; //Github identifier
+          newUser.username = req.user.username; //Github username
+          newUser.displayName = req.user.displayName; //Github username
+          persistence.save(newUser);
+        });
+      }
+    });
+   
+
+    res.redirect('/user');
   }
 );
 
@@ -73,7 +88,27 @@ app.get('/login', function(req, res){
 });
 
 app.get('/', function(req, res){
-  res.send(req.user);
+  res.send();
+});
+
+app.get('/user',function(req, res){
+  persistence.getAll(function(users){
+      res.send(users);
+  });
+});
+
+
+app.get('/save',function(req, res){
+  persistence.create(function(newUser){
+    newUser.id = 10;
+    newUser.username = 'd011y';
+    newUser.displayName = 'd011y the clone';
+    persistence.save(newUser, function(){
+      res.send("Saved");
+    });
+
+    
+  });
 });
 
 
