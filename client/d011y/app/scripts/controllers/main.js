@@ -1,9 +1,6 @@
 'use strict';
 
-d011yApp.controller('MainCtrl', function($scope) {
-  $scope.awesomeThings = [
-    'HTML5 Boilerplate',
-    'AngularJS',
-    'Testacular'
-  ];
+d011yApp.controller('MainCtrl', function($scope, $log, userservice) {
+userservice.initialize();
+  $log.log("Is user authenticated? => " + userservice.isAuthenticated());
 });

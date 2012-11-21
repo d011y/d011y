@@ -1,15 +1,26 @@
 'use strict';
 
-d011yApp.factory('userservice', function() {
-  // Service logic
-  // ...
+d011yApp.factory('userservice', function($http, $log) {
+  
 
-  var meaningOfLife = 42;
+  console.log('userservice initialized');
+
+	var user;
 
   // Public API here
   return {
-    someMethod: function() {
-      return meaningOfLife;
+    isAuthenticated: function() {
+      return user !== undefined;
+    },
+
+    initialize: function(){
+      $http.get('api/user.json').success(function(data, status){
+        if(status !== 404){
+          user = data;
+        }else{
+          $log.log("You're not logged in");
+        }
+      });    
     }
   };
 });
