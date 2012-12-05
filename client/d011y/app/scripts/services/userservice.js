@@ -2,9 +2,6 @@
 
 d011yApp.factory('userservice', function($http, $log) {
   
-
-  console.log('userservice initialized');
-
 	var user;
 
   // Public API here
@@ -15,11 +12,9 @@ d011yApp.factory('userservice', function($http, $log) {
 
     initialize: function(){
       $http.get('api/user.json').success(function(data, status){
-        if(status !== 404){
-          user = data;
-        }else{
-          $log.log("You're not logged in");
-        }
+        user = data;
+      }).error(function(data, status){
+        console.log("not authenticated");
       });    
     }
   };

@@ -11,13 +11,15 @@ describe('Service: userservice for Unauthorized user', function () {
   beforeEach(inject(function(userservice, _$httpBackend_) {
     service = userservice;
     $httpBackend = _$httpBackend_;
-
+    
     $httpBackend.
-      when('GET', 'api/user.json')
-      .respond([200, {error: 401, message:'Unauthorized access'}]);
+      whenGET('api/user.json')
+      .respond(200, {message:'ok'});
 
     service.initialize();
+
     $httpBackend.flush();
+
   }));
 
   /*Context text*/
@@ -26,12 +28,7 @@ describe('Service: userservice for Unauthorized user', function () {
   });
 
   it('should be authenticated', function () {
-    expect(service.isAuthenticated()).toBe(false);
-  });
-
-  afterEach(function() {
-    $httpBackend.verifyNoOutstandingExpectation();
-    $httpBackend.verifyNoOutstandingRequest();
+    expect(service.isAuthenticated()).toBe(true);
   });
 
 });

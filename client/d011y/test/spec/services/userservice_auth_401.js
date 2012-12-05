@@ -13,25 +13,22 @@ describe('Service: userservice for an authenticated user', function () {
     $httpBackend = _$httpBackend_;
 
     $httpBackend.
-      when('GET', 'api/user.json')
-      .respond([401, {_id:'xpto', ghId:123456, ghUsername: 'foo', ghDisplayName: 'bar'}]);
+      whenGET('api/user.json')
+      .respond(401, {message:'error'});
 
     service.initialize();
+
     $httpBackend.flush();
+
   }));
 
   /*Context text*/
-  it('should call server to retrieve user data', function(){
+  it('should call server to retrieve user data', function(){    
     $httpBackend.expect('GET', 'api/user.json');
   });
 
   it('should be authenticated', function () {
-    expect(service.isAuthenticated()).toBe(true);
+    expect(service.isAuthenticated()).toBe(false);
   });
-
-  afterEach(function() {
-    $httpBackend.verifyNoOutstandingExpectation();
-    $httpBackend.verifyNoOutstandingRequest();
-  });
-
+  
 });
