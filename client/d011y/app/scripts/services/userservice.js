@@ -14,7 +14,7 @@ d011yApp.factory('userservice', function($http, $log) {
       $http.get('api/user.json').success(function(data, status){
         user = data;
       }).error(function(data, status){
-        console.log("not authenticated");
+        $log.log("not authenticated");
       });    
     }
   };

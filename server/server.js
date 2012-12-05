@@ -8,7 +8,7 @@ var app = express(),
     server = require('http').createServer(app);
 
 var port = process.env.PORT || 8000;
-var staticDirPath = __dirname + '/public';
+var staticDirPath = __dirname + '/../client/d011y/app';
 
 
 console.log("github app id => " + conf.github.appId);
@@ -44,7 +44,9 @@ app.configure(function() {
   app.use(passport.initialize());
   app.use(passport.session());
   app.use(app.router);
-  app.use(express.static(__dirname + '/public'));
+  app.use('/styles/', express.static(__dirname + '/../client/d011y/temp/styles'));
+  app.use(express.static(staticDirPath));
+
 });
 
 app.get('/auth/github',
@@ -64,11 +66,10 @@ app.get('/auth/github/callback',
       newUser.ghUsername = req.user.username; //Github username
       newUser.ghDisplayName = req.user.displayName; //Github username
       persistence.save(newUser);
-
     });
    
 
-    res.redirect('/user');
+    res.redirect('/');
   }
 );
 
@@ -77,34 +78,13 @@ app.get('/logout', function(req, res){
   res.redirect('/');
 });
 
-app.get('/login', function(req, res){
-  req.send("not authenticated");
+app.get('/api/user.json',function(req, res){
+  if(req.user){
+    res.json({ id: req.user.id, username: req.user.username });
+  }else{
+    res.status(401).json({message:'User is not authenticated'});
+  }
 });
-
-app.get('/', function(req, res){
-  res.send();
-});
-
-app.get('/user',function(req, res){
-  persistence.getAll(function(users){
-      res.send(users);
-  });
-});
-
-
-app.get('/save',function(req, res){
-  persistence.create(function(newUser){
-    newUser.ghId = 10;
-    newUser.ghUsername = 'd011y';
-    newUser.ghDisplayName = 'd011y the clone';
-    persistence.save(newUser, function(user){
-      res.send("Saved => " + user.displayName);
-    });
-
-    
-  });
-});
-
 
 server.listen(port);
 
