@@ -16,6 +16,10 @@ d011yApp.factory('userservice', function($http, $log) {
       }).error(function(data, status){
         $log.log("not authenticated");
       });    
+    },
+
+    login: function(){
+      window.location ="/auth/github";
     }
   };
 });
